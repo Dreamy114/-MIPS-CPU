@@ -1,0 +1,92 @@
+
+
+module control_unit(
+    input logic [5:0]op,
+    input logic [4:0]shamt,
+    input logic [5:0]funct,
+    input logic Zero,
+    output logic RegWrite,
+    output logic [1:0]RegDst, 
+    output logic [1:0]ALUSrc,
+    output logic MemWrite,
+    output logic MemRead,
+    output logic [1:0]MemtoReg,
+    output logic [1:0]sel_next_pc,
+    output logic [3:0]alu_control
+  
+);
+
+logic inst_addu,inst_addiu,inst_subu,inst_lw,inst_sw,inst_beq,inst_bne,inst_jal,inst_jr,inst_slt,inst_sltu,inst_sll,inst_srl,inst_sra,inst_lui,inst_and,inst_or,inst_xor,inst_nor;
+logic [63:0]op_d,funct_d;
+logic [31:0]shamt_d;
+
+
+
+decoder_6_64 u_dec_op (.in(op),.out(op_d));
+
+decoder_6_64 u_dec_funct(.in(funct),.out(funct_d));
+
+decoder_5_32 u_dec_shamt(.in(shamt),.out(shamt_d));
+
+
+
+assign inst_addu=op_d[6'b000000] & shamt_d[5'b00000] & funct_d[6'b100001];
+assign inst_addiu=op_d[6'b001001];
+assign inst_subu=op_d[6'b000000] & shamt_d[5'b00000] & funct_d[6'b100011];
+assign inst_lw=op_d[6'b100011];
+assign inst_sw=op_d[6'b101011];
+assign inst_beq=op_d[6'b000100];
+assign inst_bne=op_d[6'b000101];
+assign inst_jal=op_d[6'b000011];
+assign inst_jr=op_d[6'b000000] & shamt_d[5'b00000] & funct_d[6'b001000];
+assign inst_slt=op_d[6'b000000] & shamt_d[5'b00000] & funct_d[6'b101010];
+assign inst_sltu=op_d[6'b000000] & shamt_d[5'b00000] & funct_d[6'b101011];
+assign inst_sll=op_d[6'b000000] & funct_d[6'b000000];
+assign inst_srl=op_d[6'b000000] & funct_d[6'b000010];
+assign inst_sra=op_d[6'b000000] & funct_d[6'b000011];
+assign inst_lui=op_d[6'b001111];
+assign inst_and=op_d[6'b000000] & shamt_d[5'b00000] & funct_d[6'b100100];
+assign inst_or=op_d[6'b000000] & shamt_d[5'b00000] & funct_d[6'b100101];
+assign inst_xor=op_d[6'b000000] & shamt_d[5'b00000] & funct_d[6'b100110];
+assign inst_nor=op_d[6'b000000] & shamt_d[5'b00000] & funct_d[6'b100111];
+
+
+
+assign RegWrite=inst_addu|inst_addiu|inst_subu|inst_lw|inst_jal|inst_sltu|inst_slt|inst_sll|inst_srl|inst_sra|inst_lui|inst_and|inst_or|inst_xor|inst_nor;
+assign RegDst[0]=inst_addu|inst_subu|inst_sltu|inst_slt|inst_sll|inst_srl|inst_sra|inst_and|inst_or|inst_xor|inst_nor;             //0:rt,1:rd
+assign RegDst[1]=inst_jal;
+assign ALUSrc[1]=inst_addiu|inst_lw|inst_sw;
+assign ALUSrc[0]=inst_sll|inst_srl|inst_sra;
+assign MemWrite=inst_sw;
+assign MemRead=inst_lw;
+assign MemtoReg[0]=inst_lw|inst_lui;
+assign MemtoReg[1]=inst_jal|inst_lui;
+assign sel_next_pc[0]=((Zero & inst_beq)|(~Zero & inst_bne))|inst_jr;
+assign sel_next_pc[1]=inst_jal|inst_jr;
+
+
+assign alu_control[0]=inst_subu|inst_beq|inst_bne|inst_slt|inst_srl|inst_and|inst_xor;
+assign alu_control[1]=inst_sltu|inst_slt|inst_sra|inst_and|inst_nor;
+assign alu_control[2]=inst_sll|inst_srl|inst_sra|inst_and;
+assign alu_control[3]=inst_or|inst_xor|inst_nor;
+
+endmodule
+
+module decoder_6_64 (
+    input logic [5:0]in,
+    output logic [63:0]out
+);
+
+assign out=64'b1<<in;
+
+endmodule
+
+
+module decoder_5_32 (
+    input logic [4:0]in,
+    output logic [31:0]out
+);
+
+assign out=32'b1<<in;
+
+endmodule

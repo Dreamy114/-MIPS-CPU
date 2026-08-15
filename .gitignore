@@ -1,0 +1,7 @@
+my_CPU.cache/
+my_CPU.hw/
+my_CPU.ip_user_files/
+my_CPU.sim/
+*.jou
+*.log
+*.str
