@@ -1,10 +1,12 @@
 
 
-module flip_flop(
+module flip_flop#(
+    parameter Width=32)
+    (
     input logic clk,
     input logic rst,
-    input logic [31:0]d_i,
-    output logic [31:0]q_o
+    input logic [Width-1:0]d_i,
+    output logic [Width-1:0]q_o
 );
 
 always_ff @(posedge clk or posedge rst) begin

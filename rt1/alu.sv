@@ -40,7 +40,7 @@ always_comb begin
         4'd7:result = a&b;
         4'd8:result = a|b;
         4'd9:result = a^b;
-        4'd10:result = a|~b;
+        4'd10:result = ~(a|b);
         
         default: result = '0;
     endcase

@@ -1,3 +1,5 @@
+`timescale 1ns / 1ps
+
 module tb;
 
 logic clk;
@@ -8,84 +10,61 @@ cpu uut(
     .rst(rst)
 );
 
+// 10ns 一个周期
 initial begin
     clk = 0;
     forever #5 clk = ~clk;
 end
 
 initial begin
+
+    // 复位
     rst = 1;
-
-    // =========================
-    // 初始化指令
-    // =========================
-
-    // $8 = 8
-    uut.imem_u.RAM[0] = 32'h24080008;
-
-    // $9 = 32
-    uut.imem_u.RAM[1] = 32'h24090020;
-
-    // $13 = -8
-    uut.imem_u.RAM[2] = 32'h240DFFF8;
-
-    // sll $11, $8, 2
-    // 8 << 2 = 32
-    uut.imem_u.RAM[3] = 32'h00085880;
-
-    // srl $12, $9, 2
-    // 32 >> 2 = 8
-    uut.imem_u.RAM[4] = 32'h00096082;
-
-    // sra $14, $13, 2
-    // -8 >>> 2 = -2
-    uut.imem_u.RAM[5] = 32'h000D7083;
-
-
-    // =========================
-    // 解除复位
-    // =========================
-
     #20;
     rst = 0;
 
+    // 等待流水线执行完
+    #400;
 
-    // =========================
-    // 每条指令执行后观察
-    // =========================
+    $display("--------------------------------");
+    $display("Register Test Result");
+    $display("--------------------------------");
 
-    repeat(6) begin
-        @(posedge clk);
-        #1;
+    $display("$1  = %d", uut.ID.regfile.rf[1]);
+    $display("$2  = %d", uut.ID.regfile.rf[2]);
+    $display("$3  = %d", uut.ID.regfile.rf[3]);
+    $display("$4  = %d", uut.ID.regfile.rf[4]);
+    $display("$5  = %d", uut.ID.regfile.rf[5]);
+    $display("$6  = %d", uut.ID.regfile.rf[6]);
+    $display("$7  = %d", uut.ID.regfile.rf[7]);
+    $display("$8  = %d", uut.ID.regfile.rf[8]);
+    $display("$9  = %d", uut.ID.regfile.rf[9]);
+    $display("$10 = %d", uut.ID.regfile.rf[10]);
+    $display("$11 = %d", uut.ID.regfile.rf[11]);
 
-        $display("--------------------------------");
-        $display("PC          = %h", uut.mips.datapath_u.pc_o);
-        $display("instr       = %h", uut.instr);
-        $display("a_src       = %h", uut.mips.datapath_u.a_src);
-        $display("b_src       = %h", uut.mips.datapath_u.b_src);
-        $display("alu_control = %b", uut.mips.datapath_u.alu_control);
-        $display("alu_result  = %h", uut.mips.datapath_u.alu_result);
+    $display("--------------------------------");
+
+    // 自动判断
+    if (uut.ID.regfile.rf[1]  == 32'd10 &&
+        uut.ID.regfile.rf[2]  == 32'd3  &&
+        uut.ID.regfile.rf[3]  == 32'd13 &&
+        uut.ID.regfile.rf[4]  == 32'd7  &&
+        uut.ID.regfile.rf[5]  == 32'd2  &&
+        uut.ID.regfile.rf[6]  == 32'd11 &&
+        uut.ID.regfile.rf[7]  == 32'd9  &&
+        uut.ID.regfile.rf[8]  == -32'd12 &&
+        uut.ID.regfile.rf[9]  == 32'd1  &&
+        uut.ID.regfile.rf[10] == 32'd5  &&
+        uut.ID.regfile.rf[11] == 32'd5) begin
+
+        $display("PASS");
+    end
+    else begin
+
+        $display("FAIL");
     end
 
-
-    // =========================
-    // 最终结果
-    // =========================
-
-    $display("================================");
-    $display("reg[8]  = %d", uut.mips.datapath_u.regfile.rf[8]);
-    $display("reg[9]  = %d", uut.mips.datapath_u.regfile.rf[9]);
-    $display("reg[11] = %d", uut.mips.datapath_u.regfile.rf[11]);
-    $display("reg[12] = %d", uut.mips.datapath_u.regfile.rf[12]);
-    $display("reg[13] = %d", $signed(uut.mips.datapath_u.regfile.rf[13]));
-    $display("reg[14] = %d", $signed(uut.mips.datapath_u.regfile.rf[14]));
-
-    if (uut.mips.datapath_u.regfile.rf[11] == 32 &&
-        uut.mips.datapath_u.regfile.rf[12] == 8 &&
-        uut.mips.datapath_u.regfile.rf[14] == 32'hFFFFFFFE)
-        $display("SLL + SRL + SRA PASS!");
-    else
-        $display("SLL + SRL + SRA FAIL!");
+    $display("--------------------------------");
 
     $finish;
 end
