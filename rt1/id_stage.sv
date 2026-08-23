@@ -18,12 +18,19 @@ module ID_stage(
     output logic [1:0]ID_sel_next_pc,
     output logic [3:0]ID_alu_control,
     output logic [31:0] ID_reg_read_data1,
-    output logic [31:0] ID_reg_read_data2
+    output logic [31:0] ID_reg_read_data2,
+    output logic [4:0] ID_rs,
+    output logic [4:0] ID_rt,
+    output logic ID_ready_go
 );
 
 logic [1:0]RegDst;
 
+assign ID_ready_go  = 1'b1;
+
 assign ID_shamt = IF_instr[10:6];
+assign ID_rs = IF_instr[25:21];
+assign ID_rt = IF_instr[20:16];
 
 reg_file regfile(
 .clk(clk),

@@ -5,12 +5,15 @@ module cpu(
     input logic rst
 );
 
+logic        pre_IF_ready_go;
+
 logic [31:0] IF_pc;
 logic [31:0] pIF_pc;
 logic [31:0] pIF_pc_plus_8;
 
 logic [31:0] IF_instr;
 logic [31:0] IF_pc_plus_8;
+logic        IF_ready_go;
 
 logic [31:0] ID_instr;
 logic [31:0] ID_pc_plus_8;
@@ -25,6 +28,12 @@ logic [1:0]  sel_next_pc;
 logic [3:0]  ID_alu_control;
 logic [31:0] ID_reg_read_data1;
 logic [31:0] ID_reg_read_data2;
+logic [4:0]  ID_rs;
+logic [4:0]  ID_rt;
+logic        ID_ready_go;
+
+logic [1:0]  ForwardA;
+logic [1:0]  ForwardB;
 
 logic [31:0] EX_instr;
 logic [31:0] EX_imm;
@@ -39,9 +48,13 @@ logic [31:0] EX_reg_read_data1;
 logic [31:0] EX_reg_read_data2;
 logic [31:0] EX_pc_plus_8;
 
+logic [4:0]  EX_rs;
+logic [4:0]  EX_rt;
+
 logic        EX_Zero;
 logic [31:0] EX_alu_result;
 logic [31:0] EX_mem_addr;
+logic        EX_ready_go;
 
 logic [31:0] MEM_instr;
 logic [4:0]  MEM_reg_write_addr;
@@ -53,6 +66,7 @@ logic [31:0] MEM_alu_result;
 logic [31:0] MEM_mem_addr;
 logic [31:0] MEM_reg_read_data2;
 logic [31:0] MEM_mem_read_data;
+logic        MEM_ready_go;
 
 logic [31:0] WB_instr;
 logic [4:0]  WB_reg_write_addr;
@@ -62,6 +76,7 @@ logic [31:0] WB_pc_plus_8;
 logic [31:0] WB_alu_result;
 logic [31:0] WB_mem_read_data;
 logic [31:0] WB_reg_write_data;
+logic        WB_ready_go;
 
 
 pre_IF_stage pre_IF(
@@ -71,7 +86,8 @@ pre_IF_stage pre_IF(
     .ID_imm(ID_imm),
     .ID_reg_read_data1(ID_reg_read_data1),
     .IF_pc_o(pIF_pc),
-    .IF_pc_plus_8(pIF_pc_plus_8)
+    .IF_pc_plus_8(pIF_pc_plus_8),
+    .pre_IF_ready_go(pre_IF_ready_go)
 );
 
 IF_res if_res(
@@ -79,6 +95,8 @@ IF_res if_res(
     .rst(rst),
     .IF_pc_i(pIF_pc),
     .IF_pc_plus_8_i(pIF_pc_plus_8),
+    .pre_IF_ready_go(pre_IF_ready_go),
+
     .IF_pc_o(IF_pc),
     .IF_pc_plus_8_o(IF_pc_plus_8)
 );
@@ -86,7 +104,8 @@ IF_res if_res(
 IF_stage IF(
     .clk(clk),
     .pc(IF_pc),
-    .IF_instr(IF_instr)
+    .IF_instr(IF_instr),
+    .IF_ready_go(IF_ready_go)
 );
 
 ID_res id_res(
@@ -94,6 +113,7 @@ ID_res id_res(
     .rst(rst),
     .IF_pc_plus_8_i(IF_pc_plus_8),
     .IF_instr_i(IF_instr),
+    .IF_ready_go(IF_ready_go),
     .IF_pc_plus_8_o(ID_pc_plus_8),
     .IF_instr_o(ID_instr)
 );
@@ -116,7 +136,10 @@ ID_stage ID(
     .ID_sel_next_pc(sel_next_pc),
     .ID_alu_control(ID_alu_control),
     .ID_reg_read_data1(ID_reg_read_data1),
-    .ID_reg_read_data2(ID_reg_read_data2)
+    .ID_reg_read_data2(ID_reg_read_data2),
+    .ID_rs(ID_rs),
+    .ID_rt(ID_rt),
+    .ID_ready_go(ID_ready_go)
 );
 
 EX_res ex_res(
@@ -134,6 +157,10 @@ EX_res ex_res(
     .ID_reg_read_data1_i(ID_reg_read_data1),
     .ID_reg_read_data2_i(ID_reg_read_data2),
     .ID_pc_plus_8_i(ID_pc_plus_8),
+    .ID_rs_i(ID_rs),
+    .ID_rt_i(ID_rt),
+    .ID_ready_go(ID_ready_go),
+
     .ID_instr_o(EX_instr),
     .ID_imm_o(EX_imm),
     .ID_shamt_o(EX_shamt),
@@ -145,7 +172,21 @@ EX_res ex_res(
     .ID_alu_control_o(EX_alu_control),
     .ID_reg_read_data1_o(EX_reg_read_data1),
     .ID_reg_read_data2_o(EX_reg_read_data2),
-    .ID_pc_plus_8_o(EX_pc_plus_8)
+    .ID_pc_plus_8_o(EX_pc_plus_8),
+    .ID_rs_o(EX_rs),
+    .ID_rt_o(EX_rt)
+);
+
+forwarding_unit Forwarding_unit(
+    .ID_rs(EX_rs),
+    .ID_rt(EX_rt),
+    .MEM_rd(MEM_reg_write_addr),
+    .MEM_RegWrite(MEM_RegWrite),
+    .WB_rd(WB_reg_write_addr),
+    .WB_RegWrite(WB_RegWrite),
+
+    .ForwardA(ForwardA),
+    .ForwardB(ForwardB)
 );
 
 EX_stage EX(
@@ -155,9 +196,16 @@ EX_stage EX(
     .ID_reg_read_data2(EX_reg_read_data2),
     .ID_shamt(EX_shamt),
     .ID_imm(EX_imm),
+
+    .MEM_alu_result(MEM_alu_result),
+    .WB_reg_write_data(WB_reg_write_data),
+    .ForwardA(ForwardA),
+    .ForwardB(ForwardB),
+
     .EX_Zero(EX_Zero),
     .EX_alu_result(EX_alu_result),
-    .EX_mem_addr(EX_mem_addr)
+    .EX_mem_addr(EX_mem_addr),
+    .EX_ready_go(EX_ready_go)
 );
 
 MEM_res mem_res(
@@ -172,6 +220,8 @@ MEM_res mem_res(
     .EX_alu_result_i(EX_alu_result),
     .EX_mem_addr_i(EX_mem_addr),
     .EX_reg_read_data2_i(EX_reg_read_data2),
+    .EX_ready_go(EX_ready_go),
+
     .EX_instr_o(MEM_instr),
     .EX_reg_write_addr_o(MEM_reg_write_addr),
     .EX_RegWrite_o(MEM_RegWrite),
@@ -189,7 +239,8 @@ MEM_stage MEM(
     .EX_MemWrite(MEM_MemWrite),
     .EX_reg_read_data2(MEM_reg_read_data2),
     .EX_mem_addr(MEM_mem_addr),
-    .MEM_mem_read_data(MEM_mem_read_data)
+    .MEM_mem_read_data(MEM_mem_read_data),
+    .MEM_ready_go(MEM_ready_go)
 
 );
 
@@ -204,6 +255,8 @@ WB_res wb_res(
     .MEM_pc_plus_8_i(MEM_pc_plus_8),
     .MEM_alu_result_i(MEM_alu_result),
     .MEM_mem_read_data_i(MEM_mem_read_data),
+    .MEM_ready_go(MEM_ready_go),
+
     .MEM_instr_o(WB_instr),
     .WB_reg_write_addr_o(WB_reg_write_addr),
     .WB_RegWrite_o(WB_RegWrite),
@@ -219,7 +272,8 @@ WB_stage WB(
     .MEM_pc_plus_8(WB_pc_plus_8),
     .MEM_mem_read_data(WB_mem_read_data),
     .MEM_MemtoReg(WB_MemtoReg),
-    .WB_reg_write_data(WB_reg_write_data)
+    .WB_reg_write_data(WB_reg_write_data),
+    .WB_ready_go(WB_ready_go)
 );
 
 endmodule

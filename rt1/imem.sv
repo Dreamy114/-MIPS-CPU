@@ -9,7 +9,7 @@ logic [31:0]RAM[63:0];
 
 initial begin
 
-$readmemb("D:/Project/CPU/my_CPU/memfile.dat",RAM);
+$readmemh("D:/Project/CPU/my_CPU/memfile.dat",RAM);
 
 end
 

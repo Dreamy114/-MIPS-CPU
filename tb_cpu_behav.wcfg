@@ -3,37 +3,61 @@
    <wave_state>
    </wave_state>
    <db_ref_list>
-      <db_ref path="tb_behav.wdb" id="1">
+      <db_ref path="cpu_tb_behav.wdb" id="1">
          <top_modules>
+            <top_module name="cpu_tb" />
             <top_module name="glbl" />
-            <top_module name="tb" />
          </top_modules>
       </db_ref>
    </db_ref_list>
    <zoom_setting>
-      <ZoomStartTime time="0.000 ns"></ZoomStartTime>
-      <ZoomEndTime time="50.482 ns"></ZoomEndTime>
-      <Cursor1Time time="36.850 ns"></Cursor1Time>
+      <ZoomStartTime time="134.996 ns"></ZoomStartTime>
+      <ZoomEndTime time="186.297 ns"></ZoomEndTime>
+      <Cursor1Time time="162.401 ns"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
-      <NameColumnWidth column_width="138"></NameColumnWidth>
+      <NameColumnWidth column_width="132"></NameColumnWidth>
       <ValueColumnWidth column_width="90"></ValueColumnWidth>
    </column_width_setting>
-   <WVObjectSize size="4" />
-   <wvobject fp_name="/tb/clk" type="logic">
+   <WVObjectSize size="10" />
+   <wvobject fp_name="/cpu_tb/uut/Forwarding_unit/ID_rs" type="array">
+      <obj_property name="ElementShortName">ID_rs[4:0]</obj_property>
+      <obj_property name="ObjectShortName">ID_rs[4:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/cpu_tb/uut/Forwarding_unit/ID_rt" type="array">
+      <obj_property name="ElementShortName">ID_rt[4:0]</obj_property>
+      <obj_property name="ObjectShortName">ID_rt[4:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/cpu_tb/uut/Forwarding_unit/MEM_rd" type="array">
+      <obj_property name="ElementShortName">MEM_rd[4:0]</obj_property>
+      <obj_property name="ObjectShortName">MEM_rd[4:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/cpu_tb/uut/Forwarding_unit/MEM_RegWrite" type="logic">
+      <obj_property name="ElementShortName">MEM_RegWrite</obj_property>
+      <obj_property name="ObjectShortName">MEM_RegWrite</obj_property>
+   </wvobject>
+   <wvobject fp_name="/cpu_tb/uut/Forwarding_unit/WB_rd" type="array">
+      <obj_property name="ElementShortName">WB_rd[4:0]</obj_property>
+      <obj_property name="ObjectShortName">WB_rd[4:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/cpu_tb/uut/Forwarding_unit/WB_RegWrite" type="logic">
+      <obj_property name="ElementShortName">WB_RegWrite</obj_property>
+      <obj_property name="ObjectShortName">WB_RegWrite</obj_property>
+   </wvobject>
+   <wvobject fp_name="/cpu_tb/uut/Forwarding_unit/ForwardA" type="array">
+      <obj_property name="ElementShortName">ForwardA[1:0]</obj_property>
+      <obj_property name="ObjectShortName">ForwardA[1:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/cpu_tb/uut/Forwarding_unit/ForwardB" type="array">
+      <obj_property name="ElementShortName">ForwardB[1:0]</obj_property>
+      <obj_property name="ObjectShortName">ForwardB[1:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/cpu_tb/uut/clk" type="logic">
       <obj_property name="ElementShortName">clk</obj_property>
       <obj_property name="ObjectShortName">clk</obj_property>
    </wvobject>
-   <wvobject fp_name="/tb/rst" type="logic">
+   <wvobject fp_name="/cpu_tb/uut/rst" type="logic">
       <obj_property name="ElementShortName">rst</obj_property>
       <obj_property name="ObjectShortName">rst</obj_property>
-   </wvobject>
-   <wvobject fp_name="/tb/uut/IF/pc" type="array">
-      <obj_property name="ElementShortName">pc[31:0]</obj_property>
-      <obj_property name="ObjectShortName">pc[31:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/tb/uut/IF/IF_instr" type="array">
-      <obj_property name="ElementShortName">IF_instr[31:0]</obj_property>
-      <obj_property name="ObjectShortName">IF_instr[31:0]</obj_property>
    </wvobject>
 </wave_config>
