@@ -13,9 +13,7 @@ $readmemh("D:/Project/CPU/my_CPU/memfile.dat",RAM);
 
 end
 
-always_ff @(posedge clk) begin
-    if(en)rd <= RAM[a[31:2]];
-end
+assign rd = en ? RAM[a[31:2]] : 32'b0;
 
 endmodule
 

@@ -8,6 +8,7 @@ module MEM_res(
     input logic EX_RegWrite_i,
     input logic [1:0]EX_MemtoReg_i,
     input logic EX_MemWrite_i,
+    input logic EX_MemRead_i,
     input logic [31:0]EX_pc_plus_8_i,
     input logic [31:0]EX_alu_result_i,
     input logic [31:0]EX_mem_addr_i,
@@ -19,6 +20,7 @@ module MEM_res(
     output logic EX_RegWrite_o,
     output logic [1:0]EX_MemtoReg_o,
     output logic EX_MemWrite_o,
+    output logic EX_MemRead_o,
     output logic [31:0]EX_pc_plus_8_o,
     output logic [31:0]EX_alu_result_o,
     output logic [31:0]EX_mem_addr_o,
@@ -67,6 +69,14 @@ pipeline_reg #(.Width(1))MEM_EX_MemWrite(
     .en(MEM_res_en),
     .d_i(EX_MemWrite_i),
     .q_o(EX_MemWrite_o)
+);
+
+pipeline_reg #(.Width(1))MEM_EX_MemRead(
+    .clk(clk),
+    .rst(rst),
+    .en(MEM_res_en),
+    .d_i(EX_MemRead_i),
+    .q_o(EX_MemRead_o)
 );
 
 pipeline_reg MEM_EX_pc_plus_8(

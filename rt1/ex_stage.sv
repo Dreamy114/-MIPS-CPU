@@ -13,7 +13,6 @@ module EX_stage(
     input logic [1:0]ForwardA,
     input logic [1:0]ForwardB,
 
-    output logic EX_Zero,
     output logic [31:0]EX_alu_result,
     output logic [31:0]EX_mem_addr,
     output logic EX_ready_go
@@ -33,7 +32,6 @@ alu alu_u(
 .mem_addr(EX_mem_addr)
 );
 
-assign EX_Zero = (forward_a_src == forward_b_src);
 
 mux4 forward_a_src_mux(
     .data0(ID_reg_read_data1),

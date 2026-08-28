@@ -5,6 +5,7 @@ module control_unit(
     input logic [4:0]shamt,
     input logic [5:0]funct,
     input logic Zero,
+
     output logic RegWrite,
     output logic [1:0]RegDst, 
     output logic [1:0]ALUSrc,
@@ -12,7 +13,9 @@ module control_unit(
     output logic MemRead,
     output logic [1:0]MemtoReg,
     output logic [1:0]sel_next_pc,
-    output logic [3:0]alu_control
+    output logic [3:0]alu_control,
+    output logic rsUsed,
+    output logic rtUsed
   
 );
 
@@ -69,6 +72,9 @@ assign alu_control[0]=inst_subu|inst_beq|inst_bne|inst_slt|inst_srl|inst_and|ins
 assign alu_control[1]=inst_sltu|inst_slt|inst_sra|inst_and|inst_nor;
 assign alu_control[2]=inst_sll|inst_srl|inst_sra|inst_and;
 assign alu_control[3]=inst_or|inst_xor|inst_nor;
+
+assign rsUsed = inst_addu|inst_addiu|inst_subu|inst_lw|inst_sw|inst_beq|inst_bne|inst_jr|inst_slt|inst_sltu|inst_and|inst_or|inst_xor|inst_nor;
+assign rtUsed = inst_addu|inst_subu|inst_sw|inst_beq|inst_bne|inst_slt|inst_sltu|inst_sll|inst_srl|inst_sra|inst_and|inst_or|inst_xor|inst_nor;
 
 endmodule
 

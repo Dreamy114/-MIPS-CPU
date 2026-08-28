@@ -1,11 +1,11 @@
 module pipeline_reg #(
-    parameter WIDTH = 32
+    parameter Width = 32
 )(
     input  logic             clk,
     input  logic             rst,
     input  logic             en,
-    input  logic [WIDTH-1:0] d_i,
-    output logic [WIDTH-1:0] q_o
+    input  logic [Width-1:0] d_i,
+    output logic [Width-1:0] q_o
 );
 
 always_ff @(posedge clk) begin

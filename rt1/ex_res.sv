@@ -11,6 +11,7 @@ module EX_res(
     input logic [1:0]ID_ALUSrc_i,
     input logic [1:0]ID_MemtoReg_i,
     input logic ID_MemWrite_i,
+    input logic ID_MemRead_i,
     input logic [3:0]ID_alu_control_i,
     input logic [31:0] ID_reg_read_data1_i,
     input logic [31:0] ID_reg_read_data2_i,
@@ -18,6 +19,7 @@ module EX_res(
     input logic [4:0] ID_rs_i,
     input logic [4:0] ID_rt_i,
     input logic ID_ready_go,
+    input logic Stall,
 
     output logic [31:0]ID_instr_o,
     output logic [31:0]ID_imm_o,
@@ -27,6 +29,7 @@ module EX_res(
     output logic [1:0]ID_ALUSrc_o,
     output logic [1:0]ID_MemtoReg_o,
     output logic ID_MemWrite_o,
+    output logic ID_MemRead_o,
     output logic [3:0]ID_alu_control_o,
     output logic [31:0] ID_reg_read_data1_o,
     output logic [31:0] ID_reg_read_data2_o,
@@ -75,7 +78,7 @@ pipeline_reg #(.Width(1))EX_ff_ID_RegWrite(
     .clk(clk),
     .rst(rst),
     .en(EX_res_en),
-    .d_i(ID_RegWrite_i),
+    .d_i(Stall ? 1'b0:ID_RegWrite_i),
     .q_o(ID_RegWrite_o)
 );
 
@@ -83,7 +86,7 @@ pipeline_reg #(.Width(2))EX_ff_ID_ALUSrc(
     .clk(clk),
     .rst(rst),
     .en(EX_res_en),
-    .d_i(ID_ALUSrc_i),
+    .d_i(Stall ? 2'b00 : ID_ALUSrc_i),
     .q_o(ID_ALUSrc_o)
 );
 
@@ -91,7 +94,7 @@ pipeline_reg #(.Width(2))EX_ff_ID_MemtoReg(
     .clk(clk),
     .rst(rst),
     .en(EX_res_en),
-    .d_i(ID_MemtoReg_i),
+    .d_i(Stall ? 2'b00 : ID_MemtoReg_i),
     .q_o(ID_MemtoReg_o)
 );
 
@@ -99,16 +102,23 @@ pipeline_reg #(.Width(1))EX_ff_ID_MemWrite(
     .clk(clk),
     .rst(rst),
     .en(EX_res_en),
-    .d_i(ID_MemWrite_i),
+    .d_i(Stall ? 1'b0:ID_MemWrite_i),
     .q_o(ID_MemWrite_o)
 );
 
+pipeline_reg #(.Width(1))EX_ff_ID_MemRead(
+    .clk(clk),
+    .rst(rst),
+    .en(EX_res_en),
+    .d_i(Stall ? 1'b0:ID_MemRead_i),
+    .q_o(ID_MemRead_o)
+);
 
 pipeline_reg #(.Width(4))EX_ff_ID_alu_control(
     .clk(clk),
     .rst(rst),
     .en(EX_res_en),
-    .d_i(ID_alu_control_i),
+    .d_i(Stall ? 4'b0000 : ID_alu_control_i),
     .q_o(ID_alu_control_o)
 );
 

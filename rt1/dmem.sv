@@ -3,6 +3,7 @@
 module dmem(
     input logic clk,
     input logic we,
+    input logic re,
     input logic [31:0]wd,
     input logic [31:0]a,
     output logic [31:0]rd
@@ -17,6 +18,6 @@ always_ff @(posedge clk) begin
     end
 end
 
-assign rd= RAM[a[31:2]];
+assign rd = re ? RAM[a[31:2]] : 32'b0;
 
 endmodule
