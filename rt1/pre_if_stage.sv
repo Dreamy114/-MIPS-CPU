@@ -31,9 +31,9 @@ adder add_jal(
 
 mux4 next_pc(
 .data0(IF_pc_plus_4),
-.data1(ID_pc_plus_4+{ID_imm[29:0],2'b00}),
-.data2({ID_pc_plus_4[31:28],instr[25:0],2'b00}),
-.data3(ID_reg_read_data1),
+.data1(ID_pc_plus_4+{ID_imm[29:0],2'b00}),//BranchTarget
+.data2({ID_pc_plus_4[31:28],instr[25:0],2'b00}),//J|JalTarget
+.data3(ID_reg_read_data1),//jrTarget
 .sel(ID_sel_next_pc),
 .result(IF_pc_o)
 );

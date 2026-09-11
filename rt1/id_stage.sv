@@ -74,18 +74,18 @@ assign Zero = (forward_a_src == forward_b_src);
 
 mux4 forward_a_src_mux(
     .data0(reg_read_data1),
-    .data1(MEM_alu_result),
-    .data2(WB_reg_write_data),
-    .data3(EX_alu_result),
+    .data1(EX_alu_result),
+    .data2(MEM_alu_result),
+    .data3(WB_reg_write_data),
     .sel(BranchForwardA),
     .result(forward_a_src)
 );
 
 mux4 forward_b_src_mux(
     .data0(reg_read_data2),
-    .data1(MEM_alu_result),
-    .data2(WB_reg_write_data),
-    .data3(EX_alu_result),
+    .data1(EX_alu_result),
+    .data2(MEM_alu_result),
+    .data3(WB_reg_write_data),
     .sel(BranchForwardB),
     .result(forward_b_src)
 );

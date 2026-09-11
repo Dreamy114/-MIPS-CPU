@@ -5,7 +5,7 @@ module imem(
     output logic [31:0]rd
 );
 
-logic [31:0]RAM[63:0];
+logic [31:0] RAM[225:0];
 
 initial begin
 
@@ -16,5 +16,3 @@ end
 assign rd = en ? RAM[a[31:2]] : 32'b0;
 
 endmodule
-
-

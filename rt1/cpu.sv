@@ -2,8 +2,18 @@
 
 module cpu(
     input logic clk,
-    input logic rst
+    input logic rst,
+
+    output logic [31:0]inst_addr,
+    input logic [31:0]inst_rdata,
+
+    output logic [31:0]data_addr,
+    output logic [31:0]data_wdata,
+    output loigc data_en,
+    output loigc data_we,
+    input logic [31:0]data_rdata 
 );
+
 
 logic        pre_IF_ready_go;
 
@@ -120,9 +130,12 @@ IF_res if_res(
     .IF_pc_plus_8_o(IF_pc_plus_8)
 );
 
+assign inst_addr = IF_pc;
+
 IF_stage IF(
     .clk(clk),
     .pc(IF_pc),
+    .inst_rdata(inst_rdata),
     .IF_instr(IF_instr),
     .IF_ready_go(IF_ready_go)
 );
@@ -299,8 +312,16 @@ MEM_stage MEM(
     .EX_MemRead(MEM_MemRead),
     .EX_reg_read_data2(MEM_reg_read_data2),
     .EX_mem_addr(MEM_mem_addr),
+
+    .data_rdata(data_rdata),
+    
     .MEM_mem_read_data(MEM_mem_read_data),
-    .MEM_ready_go(MEM_ready_go)
+    .MEM_ready_go(MEM_ready_go),
+
+    .data_addr(data_addr),
+    .data_wdata(data_wdata),
+    .data_we(data_we),
+    .data_en(data_en)
 
 );
 

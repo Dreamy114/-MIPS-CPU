@@ -17,7 +17,7 @@ module ID_res(
 
 logic ID_res_en,Flush;
 
-assign ID_res_en = IF_ready_go && !Stall;s
+assign ID_res_en = IF_ready_go && !Stall;
 assign Flush=(ID_sel_next_pc != 2'b00);
 
 pipeline_reg ID_ff_pc_plus_8(
