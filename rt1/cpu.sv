@@ -9,8 +9,8 @@ module cpu(
 
     output logic [31:0]data_addr,
     output logic [31:0]data_wdata,
-    output loigc data_en,
-    output loigc data_we,
+    output logic data_en,
+    output logic data_we,
     input logic [31:0]data_rdata 
 );
 
@@ -203,10 +203,15 @@ branch_forwarding_unit BranchForwarding_unit(
 hazard_detection_unit HDU(
     .EX_MemRead(EX_MemRead),
     .EX_rt(EX_rt),
+
+    .MEM_MemRead(MEM_MemRead),
+    .MEM_rd(MEM_reg_write_addr),
+
     .ID_rs(ID_rs),
     .ID_rt(ID_rt),
     .ID_rsUsed(ID_rsUsed),
     .ID_rtUsed(ID_rtUsed),
+
     .Stall(Stall)
 );
 

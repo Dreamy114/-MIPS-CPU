@@ -35,6 +35,9 @@ logic [1:0]RegDst;
 logic [31:0] reg_read_data1;
 logic [31:0] reg_read_data2;
 logic Zero;
+logic [31:0]sign_ext_imm;
+logic [31:0]zero_ext_imm;
+logic sel_imm;
 
 assign ID_ready_go  = 1'b1;
 
@@ -63,13 +66,27 @@ mux4 #(.Width(5)) reg_write_addr_mux(
 .result(ID_reg_write_addr)
 );
 
+//imm扩展+判断
 
 sign_ext sign_ext_u(
 .imm16(IF_instr[15:0]),
-.imm32(ID_imm)
+.imm32(sign_ext_imm)
+);
+
+zero_ext zero_ext_u(
+    .imm16(IF_instr[15:0]),
+    .imm32(zero_ext_imm)
+);
+
+mux2 imm_mux(
+    .data0(sign_ext_imm),
+    .data1(zero_ext_imm),
+    .sel(sel_imm),
+    .result(ID_imm)
 );
 
 //branch判断
+
 assign Zero = (forward_a_src == forward_b_src);
 
 mux4 forward_a_src_mux(
@@ -104,7 +121,8 @@ control_unit control_unit_u(
 .sel_next_pc(ID_sel_next_pc),
 .alu_control(ID_alu_control),
 .rsUsed(ID_rsUsed),
-.rtUsed(ID_rtUsed)
+.rtUsed(ID_rtUsed),
+.sel_imm(sel_imm)
 );
 
 endmodule

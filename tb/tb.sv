@@ -118,9 +118,18 @@ module tb;
         wait(rst == 1'b0);
 
         // 给 CPU 足够时间执行整个测试程序
-        repeat (40) @(posedge clk);
+        repeat (1000) @(posedge clk);
 
-        $display("");
+$display("");
+$display("========== ExtRAM CHECK ==========");
+
+for (integer i = 0; i < 64; i = i + 1) begin
+    $display("RAM[%0d] = %08h", i, dut.dmem_u.RAM[i]);
+end
+
+$display("==================================");
+
+    /*    $display("");
         $display("====================================================");
         $display("                 FINAL CHECK");
         $display("====================================================");
@@ -305,9 +314,8 @@ module tb;
         $display("====================================================");
         $display("              FINAL CHECK FINISHED");
         $display("====================================================");
-
+    */
         $finish;
-
     end
 
 

@@ -15,11 +15,12 @@ module control_unit(
     output logic [1:0]sel_next_pc,
     output logic [3:0]alu_control,
     output logic rsUsed,
-    output logic rtUsed
+    output logic rtUsed,
+    output logic sel_imm
   
 );
 
-logic inst_addu,inst_addiu,inst_subu,inst_lw,inst_sw,inst_beq,inst_bne,inst_jal,inst_jr,inst_slt,inst_sltu,inst_sll,inst_srl,inst_sra,inst_lui,inst_and,inst_or,inst_xor,inst_nor;
+logic inst_addu,inst_addiu,inst_subu,inst_lw,inst_sw,inst_beq,inst_bne,inst_jal,inst_jr,inst_slt,inst_sltu,inst_sll,inst_srl,inst_sra,inst_lui,inst_and,inst_or,inst_xor,inst_nor,inst_add,inst_addi,inst_sub,inst_slti,inst_sltiu,inst_andi,inst_ori,inst_xori,inst_sllv,inst_srlv,inst_srav;
 logic [63:0]op_d,funct_d;
 logic [31:0]shamt_d;
 
@@ -52,13 +53,24 @@ assign inst_and=op_d[6'b000000] & shamt_d[5'b00000] & funct_d[6'b100100];
 assign inst_or=op_d[6'b000000] & shamt_d[5'b00000] & funct_d[6'b100101];
 assign inst_xor=op_d[6'b000000] & shamt_d[5'b00000] & funct_d[6'b100110];
 assign inst_nor=op_d[6'b000000] & shamt_d[5'b00000] & funct_d[6'b100111];
+assign inst_add=op_d[6'b000000] & shamt_d[5'b00000] & funct_d[6'b100000];
+assign inst_addi=op_d[6'b001000];
+assign inst_sub=op_d[6'b000000] & shamt_d[5'b00000] & funct_d[6'b100010];
+assign inst_slti=op_d[6'b001010];
+assign inst_sltiu=op_d[6'b001011];
+assign inst_andi = op_d[6'b001100];
+assign inst_ori  = op_d[6'b001101];
+assign inst_xori = op_d[6'b001110];
+assign inst_sllv = op_d[6'b000000] & shamt_d[5'b00000] & funct_d[6'b000100];
+assign inst_srlv = op_d[6'b000000] & shamt_d[5'b00000] & funct_d[6'b000110];
+assign inst_srav = op_d[6'b000000] & shamt_d[5'b00000] & funct_d[6'b000111];
 
 
 
-assign RegWrite=inst_addu|inst_addiu|inst_subu|inst_lw|inst_jal|inst_sltu|inst_slt|inst_sll|inst_srl|inst_sra|inst_lui|inst_and|inst_or|inst_xor|inst_nor;
-assign RegDst[0]=inst_addu|inst_subu|inst_sltu|inst_slt|inst_sll|inst_srl|inst_sra|inst_and|inst_or|inst_xor|inst_nor;             //0:rt,1:rd
+assign RegWrite=inst_addu|inst_addiu|inst_subu|inst_lw|inst_jal|inst_sltu|inst_slt|inst_sll|inst_srl|inst_sra|inst_lui|inst_and|inst_or|inst_xor|inst_nor|inst_add|inst_addi|inst_sub|inst_slti|inst_sltiu|inst_andi|inst_ori|inst_xori|inst_sllv|inst_srlv|inst_srav;
+assign RegDst[0]=inst_addu|inst_subu|inst_sltu|inst_slt|inst_sll|inst_srl|inst_sra|inst_and|inst_or|inst_xor|inst_nor|inst_add|inst_sub|inst_sllv|inst_srlv|inst_srav;             //0:rt,1:rd
 assign RegDst[1]=inst_jal;
-assign ALUSrc[1]=inst_addiu|inst_lw|inst_sw;
+assign ALUSrc[1]=inst_addiu|inst_lw|inst_sw|inst_addi|inst_slti|inst_sltiu|inst_andi|inst_ori|inst_xori;
 assign ALUSrc[0]=inst_sll|inst_srl|inst_sra;
 assign MemWrite=inst_sw;
 assign MemRead=inst_lw;
@@ -66,15 +78,16 @@ assign MemtoReg[0]=inst_lw|inst_lui;
 assign MemtoReg[1]=inst_jal|inst_lui;
 assign sel_next_pc[0]=((Zero & inst_beq)|(~Zero & inst_bne))|inst_jr;
 assign sel_next_pc[1]=inst_jal|inst_jr;
+assign sel_imm=inst_andi|inst_ori|inst_xori;
 
 
-assign alu_control[0]=inst_subu|inst_beq|inst_bne|inst_slt|inst_srl|inst_and|inst_xor;
-assign alu_control[1]=inst_sltu|inst_slt|inst_sra|inst_and|inst_nor;
-assign alu_control[2]=inst_sll|inst_srl|inst_sra|inst_and;
-assign alu_control[3]=inst_or|inst_xor|inst_nor;
+assign alu_control[0]=inst_subu|inst_beq|inst_bne|inst_slt|inst_srl|inst_and|inst_xor|inst_sub|inst_slti|inst_andi|inst_xori|inst_srlv;
+assign alu_control[1]=inst_sltu|inst_slt|inst_sra|inst_and|inst_nor|inst_sltiu|inst_slti|inst_andi|inst_srav;
+assign alu_control[2]=inst_sll|inst_srl|inst_sra|inst_and|inst_andi|inst_sllv|inst_srlv|inst_srav;
+assign alu_control[3]=inst_or|inst_xor|inst_nor|inst_ori|inst_xori;
 
-assign rsUsed = inst_addu|inst_addiu|inst_subu|inst_lw|inst_sw|inst_beq|inst_bne|inst_jr|inst_slt|inst_sltu|inst_and|inst_or|inst_xor|inst_nor;
-assign rtUsed = inst_addu|inst_subu|inst_sw|inst_beq|inst_bne|inst_slt|inst_sltu|inst_sll|inst_srl|inst_sra|inst_and|inst_or|inst_xor|inst_nor;
+assign rsUsed = inst_addu|inst_addiu|inst_subu|inst_lw|inst_sw|inst_beq|inst_bne|inst_jr|inst_slt|inst_sltu|inst_and|inst_or|inst_xor|inst_nor|inst_add|inst_addi|inst_sub|inst_slti|inst_sltiu|inst_andi|inst_ori|inst_xori;
+assign rtUsed = inst_addu|inst_subu|inst_sw|inst_beq|inst_bne|inst_slt|inst_sltu|inst_sll|inst_srl|inst_sra|inst_and|inst_or|inst_xor|inst_nor|inst_add|inst_sub|inst_sllv|inst_srlv|inst_srav;
 
 endmodule
 

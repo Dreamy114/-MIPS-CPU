@@ -19,13 +19,12 @@ logic IF_res_en;
 
 assign IF_res_en = pre_IF_ready_go && !Stall;
 
-pipeline_reg IF_ff_pc(
-    .clk(clk),
-    .rst(rst),
-    .en(IF_res_en),
-    .d_i(IF_pc_i),
-    .q_o(IF_pc_o)
-);
+always_ff @(posedge clk) begin
+    if (rst)
+        IF_pc_o <= 32'h80000000;
+    else if (IF_res_en)
+        IF_pc_o <= IF_pc_i;
+end
 
 pipeline_reg IF_ff_pc_plus_4(
     .clk(clk),

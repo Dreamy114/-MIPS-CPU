@@ -14,10 +14,10 @@ logic [31:0]RAM [63:0];
 
 always_ff @(posedge clk) begin
     if(we) begin
-    RAM[a[31:2]] <= wd;
+    RAM[(a - 32'h80400000) >> 2] <= wd;
     end
 end
 
-assign rd = re ? RAM[a[31:2]] : 32'b0;
+assign rd = re ? RAM[(a - 32'h80400000) >> 2] : 32'b0;
 
 endmodule

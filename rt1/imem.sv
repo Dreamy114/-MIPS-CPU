@@ -9,10 +9,10 @@ logic [31:0] RAM[225:0];
 
 initial begin
 
-$readmemh("D:/Project/CPU/my_CPU/memfile.dat",RAM);
+$readmemh("D:/Project/CPU/my_CPU/lab1.mem", RAM);
 
 end
 
-assign rd = en ? RAM[a[31:2]] : 32'b0;
+assign rd = en ? RAM[(a - 32'h80000000) >> 2] : 32'b0;
 
 endmodule
