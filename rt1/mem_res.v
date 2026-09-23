@@ -1,33 +1,33 @@
 
 
 module MEM_res(
-    input logic clk,
-    input logic rst,
-    input logic [31:0]EX_instr_i,
-    input logic [4:0]EX_reg_write_addr_i,
-    input logic EX_RegWrite_i,
-    input logic [1:0]EX_MemtoReg_i,
-    input logic EX_MemWrite_i,
-    input logic EX_MemRead_i,
-    input logic [31:0]EX_pc_plus_8_i,
-    input logic [31:0]EX_alu_result_i,
-    input logic [31:0]EX_mem_addr_i,
-    input logic [31:0]EX_reg_read_data2_i,
-    input logic EX_ready_go,
+    input wire clk,
+    input wire rst,
+    input wire [31:0]EX_instr_i,
+    input wire [4:0]EX_reg_write_addr_i,
+    input wire EX_RegWrite_i,
+    input wire [1:0]EX_MemtoReg_i,
+    input wire EX_MemWrite_i,
+    input wire EX_MemRead_i,
+    input wire [31:0]EX_pc_plus_8_i,
+    input wire [31:0]EX_alu_result_i,
+    input wire [31:0]EX_mem_addr_i,
+    input wire [31:0]EX_reg_read_data2_i,
+    input wire EX_ready_go,
     
-    output logic [31:0]EX_instr_o,
-    output logic [4:0]EX_reg_write_addr_o,
-    output logic EX_RegWrite_o,
-    output logic [1:0]EX_MemtoReg_o,
-    output logic EX_MemWrite_o,
-    output logic EX_MemRead_o,
-    output logic [31:0]EX_pc_plus_8_o,
-    output logic [31:0]EX_alu_result_o,
-    output logic [31:0]EX_mem_addr_o,
-    output logic [31:0]EX_reg_read_data2_o
+    output wire [31:0]EX_instr_o,
+    output wire [4:0]EX_reg_write_addr_o,
+    output wire EX_RegWrite_o,
+    output wire [1:0]EX_MemtoReg_o,
+    output wire EX_MemWrite_o,
+    output wire EX_MemRead_o,
+    output wire [31:0]EX_pc_plus_8_o,
+    output wire [31:0]EX_alu_result_o,
+    output wire [31:0]EX_mem_addr_o,
+    output wire [31:0]EX_reg_read_data2_o
 );
 
-logic MEM_res_en;
+wire MEM_res_en;
 
 assign MEM_res_en = EX_ready_go;
 

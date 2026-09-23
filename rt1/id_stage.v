@@ -1,43 +1,43 @@
 
 
 module ID_stage(
-    input logic clk,
-    input logic rst,
-    input logic [31:0]IF_instr,
-    input logic WB_RegWrite,
-    input logic [4:0]WB_reg_write_addr,
-    input logic [31:0]WB_reg_write_data,
-    input logic [1:0]BranchForwardA,
-    input logic [1:0]BranchForwardB,
-    input logic [31:0]MEM_alu_result,
-    input logic [31:0]EX_alu_result,
+    input wire clk,
+    input wire rst,
+    input wire [31:0]IF_instr,
+    input wire WB_RegWrite,
+    input wire [4:0]WB_reg_write_addr,
+    input wire [31:0]WB_reg_write_data,
+    input wire [1:0]BranchForwardA,
+    input wire [1:0]BranchForwardB,
+    input wire [31:0]MEM_alu_result,
+    input wire [31:0]EX_alu_result,
 
-    output logic [31:0]ID_imm,
-    output logic [4:0]ID_shamt,
-    output logic [4:0]ID_reg_write_addr,
-    output logic ID_RegWrite,
-    output logic [1:0]ID_ALUSrc,
-    output logic [1:0]ID_MemtoReg,
-    output logic ID_MemWrite,
-    output logic ID_MemRead,
-    output logic [1:0]ID_sel_next_pc,
-    output logic [3:0]ID_alu_control,
-    output logic [31:0] forward_a_src,
-    output logic [31:0] forward_b_src,
-    output logic [4:0] ID_rs,
-    output logic [4:0] ID_rt,
-    output logic ID_ready_go,
-    output logic ID_rsUsed,
-    output logic ID_rtUsed
+    output wire [31:0]ID_imm,
+    output wire [4:0]ID_shamt,
+    output wire [4:0]ID_reg_write_addr,
+    output wire ID_RegWrite,
+    output wire [1:0]ID_ALUSrc,
+    output wire [1:0]ID_MemtoReg,
+    output wire ID_MemWrite,
+    output wire ID_MemRead,
+    output wire [1:0]ID_sel_next_pc,
+    output wire [3:0]ID_alu_control,
+    output wire [31:0] forward_a_src,
+    output wire [31:0] forward_b_src,
+    output wire [4:0] ID_rs,
+    output wire [4:0] ID_rt,
+    output wire ID_ready_go,
+    output wire ID_rsUsed,
+    output wire ID_rtUsed
 );
 
-logic [1:0]RegDst;
-logic [31:0] reg_read_data1;
-logic [31:0] reg_read_data2;
-logic Zero;
-logic [31:0]sign_ext_imm;
-logic [31:0]zero_ext_imm;
-logic sel_imm;
+wire [1:0]RegDst;
+wire [31:0] reg_read_data1;
+wire [31:0] reg_read_data2;
+wire Zero;
+wire [31:0]sign_ext_imm;
+wire [31:0]zero_ext_imm;
+wire sel_imm;
 
 assign ID_ready_go  = 1'b1;
 

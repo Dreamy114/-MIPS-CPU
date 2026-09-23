@@ -1,106 +1,106 @@
 
 
 module cpu(
-    input logic clk,
-    input logic rst,
+    input wire clk,
+    input wire rst,
 
-    output logic [31:0]inst_addr,
-    input logic [31:0]inst_rdata,
+    output wire [31:0]inst_addr,
+    input wire [31:0]inst_rdata,
 
-    output logic [31:0]data_addr,
-    output logic [31:0]data_wdata,
-    output logic data_en,
-    output logic data_we,
-    input logic [31:0]data_rdata 
+    output wire [31:0]data_addr,
+    output wire [31:0]data_wdata,
+    output wire data_en,
+    output wire data_we,
+    input wire [31:0]data_rdata 
 );
 
 
-logic        pre_IF_ready_go;
+wire        pre_IF_ready_go;
 
 
-logic [31:0] IF_pc;
-logic [31:0] pIF_pc;
-logic [31:0] pIF_pc_plus_4;
-logic [31:0] pIF_pc_plus_8;
+wire [31:0] IF_pc;
+wire [31:0] pIF_pc;
+wire [31:0] pIF_pc_plus_4;
+wire [31:0] pIF_pc_plus_8;
 
-logic [31:0] IF_instr;
-logic [31:0] IF_pc_plus_4;
-logic [31:0] IF_pc_plus_8;
-logic        IF_ready_go;
+wire [31:0] IF_instr;
+wire [31:0] IF_pc_plus_4;
+wire [31:0] IF_pc_plus_8;
+wire        IF_ready_go;
 
-logic [31:0] ID_instr;
-logic [31:0] ID_pc_plus_4;
-logic [31:0] ID_pc_plus_8;
-logic [31:0] ID_imm;
-logic [4:0]  ID_shamt;
-logic [4:0]  ID_reg_write_addr;
-logic        ID_RegWrite;
-logic [1:0]  ID_ALUSrc;
-logic [1:0]  ID_MemtoReg;
-logic        ID_MemWrite;
-logic        ID_MemRead;
-logic [1:0]  sel_next_pc;
-logic [3:0]  ID_alu_control;
-logic [31:0] ID_reg_read_data1;
-logic [31:0] ID_reg_read_data2;
-logic [4:0]  ID_rs;
-logic [4:0]  ID_rt;
-logic        ID_ready_go;
-logic        ID_rsUsed;
-logic        ID_rtUsed;
+wire [31:0] ID_instr;
+wire [31:0] ID_pc_plus_4;
+wire [31:0] ID_pc_plus_8;
+wire [31:0] ID_imm;
+wire [4:0]  ID_shamt;
+wire [4:0]  ID_reg_write_addr;
+wire        ID_RegWrite;
+wire [1:0]  ID_ALUSrc;
+wire [1:0]  ID_MemtoReg;
+wire        ID_MemWrite;
+wire        ID_MemRead;
+wire [1:0]  sel_next_pc;
+wire [3:0]  ID_alu_control;
+wire [31:0] ID_reg_read_data1;
+wire [31:0] ID_reg_read_data2;
+wire [4:0]  ID_rs;
+wire [4:0]  ID_rt;
+wire        ID_ready_go;
+wire        ID_rsUsed;
+wire        ID_rtUsed;
 
-logic [1:0]  ForwardA;
-logic [1:0]  ForwardB;
+wire [1:0]  ForwardA;
+wire [1:0]  ForwardB;
 
-logic [1:0]  BranchForwardA;
-logic [1:0]  BranchForwardB;
+wire [1:0]  BranchForwardA;
+wire [1:0]  BranchForwardB;
 
-logic [31:0] EX_instr;
-logic [31:0] EX_imm;
-logic [4:0]  EX_shamt;
-logic [4:0]  EX_reg_write_addr;
-logic        EX_RegWrite;
-logic [1:0]  EX_ALUSrc;
-logic [1:0]  EX_MemtoReg;
-logic        EX_MemWrite;
-logic [3:0]  EX_alu_control;
-logic [31:0] EX_reg_read_data1;
-logic [31:0] EX_reg_read_data2;
-logic [31:0] EX_pc_plus_8;
+wire [31:0] EX_instr;
+wire [31:0] EX_imm;
+wire [4:0]  EX_shamt;
+wire [4:0]  EX_reg_write_addr;
+wire        EX_RegWrite;
+wire [1:0]  EX_ALUSrc;
+wire [1:0]  EX_MemtoReg;
+wire        EX_MemWrite;
+wire [3:0]  EX_alu_control;
+wire [31:0] EX_reg_read_data1;
+wire [31:0] EX_reg_read_data2;
+wire [31:0] EX_pc_plus_8;
 
-logic [4:0]  EX_rs;
-logic [4:0]  EX_rt;
+wire [4:0]  EX_rs;
+wire [4:0]  EX_rt;
 
-logic        EX_Zero;
-logic [31:0] EX_alu_result;
-logic [31:0] EX_mem_addr;
-logic        EX_ready_go;
-logic        EX_MemRead;
+wire        EX_Zero;
+wire [31:0] EX_alu_result;
+wire [31:0] EX_mem_addr;
+wire        EX_ready_go;
+wire        EX_MemRead;
 
 
-logic [31:0] MEM_instr;
-logic [4:0]  MEM_reg_write_addr;
-logic        MEM_RegWrite;
-logic [1:0]  MEM_MemtoReg;
-logic        MEM_MemWrite;
-logic [31:0] MEM_pc_plus_8;
-logic [31:0] MEM_alu_result;
-logic [31:0] MEM_mem_addr;
-logic [31:0] MEM_reg_read_data2;
-logic [31:0] MEM_mem_read_data;
-logic        MEM_ready_go;
+wire [31:0] MEM_instr;
+wire [4:0]  MEM_reg_write_addr;
+wire        MEM_RegWrite;
+wire [1:0]  MEM_MemtoReg;
+wire        MEM_MemWrite;
+wire [31:0] MEM_pc_plus_8;
+wire [31:0] MEM_alu_result;
+wire [31:0] MEM_mem_addr;
+wire [31:0] MEM_reg_read_data2;
+wire [31:0] MEM_mem_read_data;
+wire        MEM_ready_go;
 
-logic [31:0] WB_instr;
-logic [4:0]  WB_reg_write_addr;
-logic        WB_RegWrite;
-logic [1:0]  WB_MemtoReg;
-logic [31:0] WB_pc_plus_8;
-logic [31:0] WB_alu_result;
-logic [31:0] WB_mem_read_data;
-logic [31:0] WB_reg_write_data;
-logic        WB_ready_go;
+wire [31:0] WB_instr;
+wire [4:0]  WB_reg_write_addr;
+wire        WB_RegWrite;
+wire [1:0]  WB_MemtoReg;
+wire [31:0] WB_pc_plus_8;
+wire [31:0] WB_alu_result;
+wire [31:0] WB_mem_read_data;
+wire [31:0] WB_reg_write_data;
+wire        WB_ready_go;
 
-logic        Stall;
+wire        Stall;
 
 pre_IF_stage pre_IF(
     .pc_i(IF_pc),

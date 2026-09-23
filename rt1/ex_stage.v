@@ -1,26 +1,26 @@
 
 
 module EX_stage(
-    input logic [3:0]ID_alu_control,
-    input logic [1:0]ID_ALUSrc,
-    input logic [31:0]ID_reg_read_data1,
-    input logic [31:0]ID_reg_read_data2,
-    input logic [4:0]ID_shamt,
-    input logic [31:0]ID_imm,
+    input wire [3:0]ID_alu_control,
+    input wire [1:0]ID_ALUSrc,
+    input wire [31:0]ID_reg_read_data1,
+    input wire [31:0]ID_reg_read_data2,
+    input wire [4:0]ID_shamt,
+    input wire [31:0]ID_imm,
 
-    input logic [31:0]MEM_alu_result,
-    input logic [31:0]WB_reg_write_data,
-    input logic [1:0]ForwardA,
-    input logic [1:0]ForwardB,
+    input wire [31:0]MEM_alu_result,
+    input wire [31:0]WB_reg_write_data,
+    input wire [1:0]ForwardA,
+    input wire [1:0]ForwardB,
 
-    output logic [31:0]EX_alu_result,
-    output logic [31:0]EX_mem_addr,
-    output logic EX_ready_go
+    output wire [31:0]EX_alu_result,
+    output wire [31:0]EX_mem_addr,
+    output wire EX_ready_go
 );
 
-logic [31:0]a_src,b_src;
-logic [31:0]forward_a_src;
-logic [31:0]forward_b_src;
+wire [31:0]a_src,b_src;
+wire [31:0]forward_a_src;
+wire [31:0]forward_b_src;
 
 assign EX_ready_go  = 1'b1;
 

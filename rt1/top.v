@@ -1,16 +1,16 @@
 module top(
-    input logic clk,
-    input logic rst
+    input wire clk,
+    input wire rst
 );
 
-logic [31:0] inst_addr;
-logic [31:0] inst_rdata;
+wire [31:0] inst_addr;
+wire [31:0] inst_rdata;
 
-logic [31:0] data_addr;
-logic [31:0] data_wdata;
-logic [31:0] data_rdata;
-logic data_we;
-logic data_en;
+wire [31:0] data_addr;
+wire [31:0] data_wdata;
+wire [31:0] data_rdata;
+wire data_we;
+wire data_en;
 
 cpu cpu_u(
     .clk(clk),

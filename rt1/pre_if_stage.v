@@ -1,17 +1,17 @@
 
 
 module pre_IF_stage(
-    input logic [31:0]pc_i,
-    input logic [31:0]instr,
-    input logic [1:0]ID_sel_next_pc, 
-    input logic [31:0]ID_imm,
-    input logic [31:0]ID_reg_read_data1,
-    input logic [31:0]ID_pc_plus_4,
+    input wire [31:0]pc_i,
+    input wire [31:0]instr,
+    input wire [1:0]ID_sel_next_pc, 
+    input wire [31:0]ID_imm,
+    input wire [31:0]ID_reg_read_data1,
+    input wire [31:0]ID_pc_plus_4,
 
-    output logic [31:0]IF_pc_o,
-    output logic [31:0]IF_pc_plus_4,
-    output logic [31:0]IF_pc_plus_8,
-    output logic pre_IF_ready_go
+    output wire [31:0]IF_pc_o,
+    output wire [31:0]IF_pc_plus_4,
+    output wire [31:0]IF_pc_plus_8,
+    output wire pre_IF_ready_go
 );
 
 

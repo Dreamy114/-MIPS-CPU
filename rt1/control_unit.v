@@ -1,28 +1,28 @@
 
 
 module control_unit(
-    input logic [5:0]op,
-    input logic [4:0]shamt,
-    input logic [5:0]funct,
-    input logic Zero,
+    input wire [5:0]op,
+    input wire [4:0]shamt,
+    input wire [5:0]funct,
+    input wire Zero,
 
-    output logic RegWrite,
-    output logic [1:0]RegDst, 
-    output logic [1:0]ALUSrc,
-    output logic MemWrite,
-    output logic MemRead,
-    output logic [1:0]MemtoReg,
-    output logic [1:0]sel_next_pc,
-    output logic [3:0]alu_control,
-    output logic rsUsed,
-    output logic rtUsed,
-    output logic sel_imm
+    output wire RegWrite,
+    output wire [1:0]RegDst, 
+    output wire [1:0]ALUSrc,
+    output wire MemWrite,
+    output wire MemRead,
+    output wire [1:0]MemtoReg,
+    output wire [1:0]sel_next_pc,
+    output wire [3:0]alu_control,
+    output wire rsUsed,
+    output wire rtUsed,
+    output wire sel_imm
   
 );
 
-logic inst_addu,inst_addiu,inst_subu,inst_lw,inst_sw,inst_beq,inst_bne,inst_jal,inst_jr,inst_slt,inst_sltu,inst_sll,inst_srl,inst_sra,inst_lui,inst_and,inst_or,inst_xor,inst_nor,inst_add,inst_addi,inst_sub,inst_slti,inst_sltiu,inst_andi,inst_ori,inst_xori,inst_sllv,inst_srlv,inst_srav;
-logic [63:0]op_d,funct_d;
-logic [31:0]shamt_d;
+wire inst_addu,inst_addiu,inst_subu,inst_lw,inst_sw,inst_beq,inst_bne,inst_jal,inst_jr,inst_slt,inst_sltu,inst_sll,inst_srl,inst_sra,inst_lui,inst_and,inst_or,inst_xor,inst_nor,inst_add,inst_addi,inst_sub,inst_slti,inst_sltiu,inst_andi,inst_ori,inst_xori,inst_sllv,inst_srlv,inst_srav;
+wire [63:0]op_d,funct_d;
+wire [31:0]shamt_d;
 
 
 
@@ -92,8 +92,8 @@ assign rtUsed = inst_addu|inst_subu|inst_sw|inst_beq|inst_bne|inst_slt|inst_sltu
 endmodule
 
 module decoder_6_64 (
-    input logic [5:0]in,
-    output logic [63:0]out
+    input wire [5:0]in,
+    output wire [63:0]out
 );
 
 assign out=64'b1<<in;
@@ -102,8 +102,8 @@ endmodule
 
 
 module decoder_5_32 (
-    input logic [4:0]in,
-    output logic [31:0]out
+    input wire [4:0]in,
+    output wire [31:0]out
 );
 
 assign out=32'b1<<in;

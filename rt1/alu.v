@@ -1,19 +1,19 @@
 
 
 module alu(
-    input logic [31:0]a,
-    input logic [31:0]b,
-    input logic [3:0]alu_control,
-    output logic [31:0]result,
-    output logic [31:0]mem_addr
+    input wire [31:0]a,
+    input wire [31:0]b,
+    input wire [3:0]alu_control,
+    output wire [31:0]result,
+    output wire [31:0]mem_addr
 );
 
-logic [32:0] ext_a,ext_b,sub_res;
-logic cout;
+wire [32:0] ext_a,ext_b,sub_res;
+wire cout;
 
 assign mem_addr=a+b;
 
-always_comb begin//防溢出
+always @(*) begin//防溢出
     if(alu_control==4'd2)begin//无符号比较
         ext_a={1'b0,a};
         ext_b={1'b0,b};
@@ -27,7 +27,7 @@ always_comb begin//防溢出
     cout=sub_res[32];//（a<b）输出1，否则输出0
 end
 
-always_comb begin
+always @(*) begin
 
     case(alu_control)
         4'd0:result = a+b;
@@ -42,7 +42,7 @@ always_comb begin
         4'd9:result = a^b;//XOR（按位异或）
         4'd10:result = ~(a|b);//NOR（按位或非）
         
-        default: result = '0;
+        default: result = 32b'0;
     endcase
 
 end

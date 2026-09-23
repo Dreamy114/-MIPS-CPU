@@ -1,19 +1,19 @@
 module hazard_detection_unit(
-    input logic EX_MemRead,
-    input logic [4:0] EX_rt,
+    input wire EX_MemRead,
+    input wire [4:0] EX_rt,
 
-    input logic MEM_MemRead,
-    input logic [4:0] MEM_rd,
+    input wire MEM_MemRead,
+    input wire [4:0] MEM_rd,
 
-    input logic [4:0] ID_rs,
-    input logic [4:0] ID_rt,
-    input logic ID_rsUsed,
-    input logic ID_rtUsed,
+    input wire [4:0] ID_rs,
+    input wire [4:0] ID_rt,
+    input wire ID_rsUsed,
+    input wire ID_rtUsed,
 
-    output logic Stall
+    output wire Stall
 );
 
-always_comb begin
+always @(*) begin
     Stall = 1'b0;
 
     if(EX_MemRead && (EX_rt != 5'b0)) begin

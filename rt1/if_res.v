@@ -1,25 +1,25 @@
 
 
 module IF_res(
-    input logic clk,
-    input logic rst,
-    input logic [31:0]IF_pc_i,
-    input logic [31:0]IF_pc_plus_4_i,
-    input logic [31:0]IF_pc_plus_8_i,
-    input logic pre_IF_ready_go,
-    input logic Stall,
+    input wire clk,
+    input wire rst,
+    input wire [31:0]IF_pc_i,
+    input wire [31:0]IF_pc_plus_4_i,
+    input wire [31:0]IF_pc_plus_8_i,
+    input wire pre_IF_ready_go,
+    input wire Stall,
 
-    output logic [31:0]IF_pc_o,
-    output logic [31:0]IF_pc_plus_4_o,
-    output logic [31:0]IF_pc_plus_8_o
+    output reg [31:0]IF_pc_o,
+    output wire [31:0]IF_pc_plus_4_o,
+    output wire [31:0]IF_pc_plus_8_o
 
 );
 
-logic IF_res_en;
+wire IF_res_en;
 
 assign IF_res_en = pre_IF_ready_go && !Stall;
 
-always_ff @(posedge clk) begin
+always @(posedge clk) begin
     if (rst)
         IF_pc_o <= 32'h80000000;
     else if (IF_res_en)
