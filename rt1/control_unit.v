@@ -20,7 +20,7 @@ module control_unit(
   
 );
 
-wire inst_addu,inst_addiu,inst_subu,inst_lw,inst_sw,inst_beq,inst_bne,inst_jal,inst_jr,inst_slt,inst_sltu,inst_sll,inst_srl,inst_sra,inst_lui,inst_and,inst_or,inst_xor,inst_nor,inst_add,inst_addi,inst_sub,inst_slti,inst_sltiu,inst_andi,inst_ori,inst_xori,inst_sllv,inst_srlv,inst_srav;
+wire inst_addu,inst_addiu,inst_subu,inst_lw,inst_sw,inst_beq,inst_bne,inst_jal,inst_jr,inst_slt,inst_sltu,inst_sll,inst_srl,inst_sra,inst_lui,inst_and,inst_or,inst_xor,inst_nor,inst_add,inst_addi,inst_sub,inst_slti,inst_sltiu,inst_andi,inst_ori,inst_xori,inst_sllv,inst_srlv,inst_srav,inst_bgtz;
 wire [63:0]op_d,funct_d;
 wire [31:0]shamt_d;
 
@@ -64,6 +64,7 @@ assign inst_xori = op_d[6'b001110];
 assign inst_sllv = op_d[6'b000000] & shamt_d[5'b00000] & funct_d[6'b000100];
 assign inst_srlv = op_d[6'b000000] & shamt_d[5'b00000] & funct_d[6'b000110];
 assign inst_srav = op_d[6'b000000] & shamt_d[5'b00000] & funct_d[6'b000111];
+assign inst_bgtz = op_d[6'b000111];
 
 
 

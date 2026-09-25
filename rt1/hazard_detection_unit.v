@@ -10,7 +10,7 @@ module hazard_detection_unit(
     input wire ID_rsUsed,
     input wire ID_rtUsed,
 
-    output wire Stall
+    output reg Stall
 );
 
 always @(*) begin

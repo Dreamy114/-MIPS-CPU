@@ -1,5 +1,3 @@
-
-
 module IF_res(
     input wire clk,
     input wire rst,
@@ -10,9 +8,8 @@ module IF_res(
     input wire Stall,
 
     output reg [31:0]IF_pc_o,
-    output wire [31:0]IF_pc_plus_4_o,
-    output wire [31:0]IF_pc_plus_8_o
-
+    output reg [31:0]IF_pc_plus_4_o,
+    output reg [31:0]IF_pc_plus_8_o
 );
 
 wire IF_res_en;
@@ -20,26 +17,16 @@ wire IF_res_en;
 assign IF_res_en = pre_IF_ready_go && !Stall;
 
 always @(posedge clk) begin
-    if (rst)
-        IF_pc_o <= 32'h80000000;
-    else if (IF_res_en)
-        IF_pc_o <= IF_pc_i;
+    if (rst) begin
+        IF_pc_o        <= 32'h80000000;
+        IF_pc_plus_4_o <= 32'h80000004;
+        IF_pc_plus_8_o <= 32'h80000008;
+    end
+    else if (IF_res_en) begin
+        IF_pc_o        <= IF_pc_i;
+        IF_pc_plus_4_o <= IF_pc_plus_4_i;
+        IF_pc_plus_8_o <= IF_pc_plus_8_i;
+    end
 end
-
-pipeline_reg IF_ff_pc_plus_4(
-    .clk(clk),
-    .rst(rst),
-    .en(IF_res_en),
-    .d_i(IF_pc_plus_4_i),
-    .q_o(IF_pc_plus_4_o)
-);
-
-pipeline_reg IF_ff_pc_plus_8(
-    .clk(clk),
-    .rst(rst),
-    .en(IF_res_en),
-    .d_i(IF_pc_plus_8_i),
-    .q_o(IF_pc_plus_8_o)
-);
 
 endmodule

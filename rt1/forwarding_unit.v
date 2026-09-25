@@ -6,8 +6,8 @@ module forwarding_unit(
     input wire [4:0]WB_rd,
     input wire WB_RegWrite,
 
-    output wire [1:0]ForwardA,
-    output wire [1:0]ForwardB
+    output reg [1:0]ForwardA,
+    output reg [1:0]ForwardB
 );
 
 always @(*) begin

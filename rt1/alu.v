@@ -4,12 +4,12 @@ module alu(
     input wire [31:0]a,
     input wire [31:0]b,
     input wire [3:0]alu_control,
-    output wire [31:0]result,
+    output reg [31:0]result,
     output wire [31:0]mem_addr
 );
 
-wire [32:0] ext_a,ext_b,sub_res;
-wire cout;
+reg [32:0] ext_a,ext_b,sub_res;
+reg cout;
 
 assign mem_addr=a+b;
 
@@ -42,7 +42,7 @@ always @(*) begin
         4'd9:result = a^b;//XOR（按位异或）
         4'd10:result = ~(a|b);//NOR（按位或非）
         
-        default: result = 32b'0;
+        default: result = 32'b0;
     endcase
 
 end

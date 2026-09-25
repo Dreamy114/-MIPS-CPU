@@ -5,11 +5,11 @@ module imem(
     output wire [31:0]rd
 );
 
-wire [31:0] RAM[225:0];
+reg [31:0] RAM[225:0];
 
 initial begin
 
-$readmemh("D:/Project/CPU/my_CPU/lab1.mem", RAM);
+$readmemh("D:/Project/CPU/my_CPU/memfile.dat", RAM);
 
 end
 

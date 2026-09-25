@@ -18,7 +18,10 @@ module ID_res(
 wire ID_res_en,Flush;
 
 assign ID_res_en = IF_ready_go && !Stall;
-assign Flush=(ID_sel_next_pc != 2'b00);
+
+
+//assign Flush=(ID_sel_next_pc != 2'b00);
+//去掉flush，实现延迟槽
 
 pipeline_reg ID_ff_pc_plus_8(
     .clk(clk),
@@ -40,7 +43,7 @@ pipeline_reg ID_instr(
     .clk(clk),
     .rst(rst),
     .en(ID_res_en),
-    .d_i(Flush? 32'h00000000:IF_instr_i),
+    .d_i(IF_instr_i),
     .q_o(IF_instr_o)
 );
 
