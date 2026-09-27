@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wave_config>
+   <wave_state>
+   </wave_state>
+   <db_ref_list>
+      <db_ref path="tb_branch_flush_behav.wdb" id="1">
+         <top_modules>
+            <top_module name="glbl" />
+            <top_module name="tb_branch_flush" />
+         </top_modules>
+      </db_ref>
+   </db_ref_list>
+   <zoom_setting>
+      <ZoomStartTime time="34.306 ns"></ZoomStartTime>
+      <ZoomEndTime time="52.627 ns"></ZoomEndTime>
+      <Cursor1Time time="44.966 ns"></Cursor1Time>
+   </zoom_setting>
+   <column_width_setting>
+      <NameColumnWidth column_width="205"></NameColumnWidth>
+      <ValueColumnWidth column_width="155"></ValueColumnWidth>
+   </column_width_setting>
+   <WVObjectSize size="6" />
+   <wvobject fp_name="/tb_branch_flush/clk" type="logic">
+      <obj_property name="ElementShortName">clk</obj_property>
+      <obj_property name="ObjectShortName">clk</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_branch_flush/rst" type="logic">
+      <obj_property name="ElementShortName">rst</obj_property>
+      <obj_property name="ObjectShortName">rst</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_branch_flush/uut/pre_IF/pc_i" type="array">
+      <obj_property name="ElementShortName">pc_i[31:0]</obj_property>
+      <obj_property name="ObjectShortName">pc_i[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_branch_flush/uut/pre_IF/pc_plus_4" type="array">
+      <obj_property name="ElementShortName">pc_plus_4[31:0]</obj_property>
+      <obj_property name="ObjectShortName">pc_plus_4[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_branch_flush/uut/pre_IF/IF_pc_o" type="array">
+      <obj_property name="ElementShortName">IF_pc_o[31:0]</obj_property>
+      <obj_property name="ObjectShortName">IF_pc_o[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_branch_flush/uut/pre_IF/ID_imm" type="array">
+      <obj_property name="ElementShortName">ID_imm[31:0]</obj_property>
+      <obj_property name="ObjectShortName">ID_imm[31:0]</obj_property>
+   </wvobject>
+</wave_config>

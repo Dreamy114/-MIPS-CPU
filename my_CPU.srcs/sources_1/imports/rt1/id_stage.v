@@ -28,10 +28,7 @@ module ID_stage(
     output wire [4:0] ID_rt,
     output wire ID_ready_go,
     output wire ID_rsUsed,
-    output wire ID_rtUsed,
-    output wire ID_mem_load_type,
-    output wire ID_op_sb,
-    output wire ID_op_sh
+    output wire ID_rtUsed
 );
 
 wire [1:0]RegDst;
@@ -131,10 +128,7 @@ control_unit control_unit_u(
 .alu_control(ID_alu_control),
 .rsUsed(ID_rsUsed),
 .rtUsed(ID_rtUsed),
-.sel_imm(sel_imm),
-.mem_load_type(ID_mem_load_type),
-.op_sb(ID_op_sb),
-.op_sh(ID_op_sh)
+.sel_imm(sel_imm)
 );
 
 endmodule

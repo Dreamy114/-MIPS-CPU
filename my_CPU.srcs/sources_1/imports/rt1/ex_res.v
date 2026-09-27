@@ -20,9 +20,6 @@ module EX_res(
     input wire [4:0] ID_rt_i,
     input wire ID_ready_go,
     input wire Stall,
-    input wire ID_mem_load_type_i,
-    input wire ID_op_sb_i,
-    input wire ID_op_sh_i,
 
     output wire [31:0]ID_instr_o,
     output wire [31:0]ID_imm_o,
@@ -38,10 +35,7 @@ module EX_res(
     output wire [31:0] ID_reg_read_data2_o,
     output wire [31:0]ID_pc_plus_8_o,
     output wire [4:0] ID_rs_o,
-    output wire [4:0] ID_rt_o,
-    output wire ID_mem_load_type_o,
-    output wire ID_op_sb_o,
-    output wire ID_op_sh_o
+    output wire [4:0] ID_rt_o
 );
 
 wire EX_res_en;
@@ -166,30 +160,6 @@ pipeline_reg #(.Width(5))EX_ff_ID_rt(
     .en(EX_res_en),
     .d_i(ID_rt_i),
     .q_o(ID_rt_o)
-);
-
-pipeline_reg #(.Width(1))EX_ff_ID_mem_load_type(
-    .clk(clk),
-    .rst(rst),
-    .en(EX_res_en),
-    .d_i(ID_mem_load_type_i),
-    .q_o(ID_mem_load_type_o)
-);
-
-pipeline_reg #(.Width(1))EX_ff_ID_op_sb(
-    .clk(clk),
-    .rst(rst),
-    .en(EX_res_en),
-    .d_i(Stall ? 1'b0 : ID_op_sb_i),
-    .q_o(ID_op_sb_o)
-);
-
-pipeline_reg #(.Width(1))EX_ff_ID_op_sh(
-    .clk(clk),
-    .rst(rst),
-    .en(EX_res_en),
-    .d_i(Stall ? 1'b0 : ID_op_sh_i),
-    .q_o(ID_op_sh_o)
 );
 
 endmodule

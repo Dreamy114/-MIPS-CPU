@@ -8,7 +8,7 @@ module EX_stage(
     input wire [4:0]ID_shamt,
     input wire [31:0]ID_imm,
 
-    input wire [31:0]mem_forward_data,
+    input wire [31:0]MEM_alu_result,
     input wire [31:0]WB_reg_write_data,
     input wire [1:0]ForwardA,
     input wire [1:0]ForwardB,
@@ -35,7 +35,7 @@ alu alu_u(
 
 mux4 forward_a_src_mux(
     .data0(ID_reg_read_data1),
-    .data1(mem_forward_data),
+    .data1(MEM_alu_result),
     .data2(WB_reg_write_data),
     .data3(),
     .sel(ForwardA),
@@ -44,7 +44,7 @@ mux4 forward_a_src_mux(
 
 mux4 forward_b_src_mux(
     .data0(ID_reg_read_data2),
-    .data1(mem_forward_data),
+    .data1(MEM_alu_result),
     .data2(WB_reg_write_data),
     .data3(),
     .sel(ForwardB),

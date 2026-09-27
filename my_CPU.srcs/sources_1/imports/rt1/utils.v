@@ -71,5 +71,4 @@ module zero_ext(
 
 assign imm32={16'b0,imm16};
 
-
 endmodule

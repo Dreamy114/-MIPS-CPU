@@ -17,14 +17,11 @@ module control_unit(
     output wire [3:0]alu_control,
     output wire rsUsed,
     output wire rtUsed,
-    output wire sel_imm,
-    output wire mem_load_type,
-    output wire op_sb,
-    output wire op_sh
-
+    output wire sel_imm
+  
 );
 
-wire inst_addu,inst_addiu,inst_subu,inst_lw,inst_sw,inst_beq,inst_bne,inst_jal,inst_jr,inst_slt,inst_sltu,inst_sll,inst_srl,inst_sra,inst_lui,inst_and,inst_or,inst_xor,inst_nor,inst_add,inst_addi,inst_sub,inst_slti,inst_sltiu,inst_andi,inst_ori,inst_xori,inst_sllv,inst_srlv,inst_srav,inst_bgtz,inst_lb,inst_sb,inst_sh;
+wire inst_addu,inst_addiu,inst_subu,inst_lw,inst_sw,inst_beq,inst_bne,inst_jal,inst_jr,inst_slt,inst_sltu,inst_sll,inst_srl,inst_sra,inst_lui,inst_and,inst_or,inst_xor,inst_nor,inst_add,inst_addi,inst_sub,inst_slti,inst_sltiu,inst_andi,inst_ori,inst_xori,inst_sllv,inst_srlv,inst_srav,inst_bgtz;
 wire [63:0]op_d,funct_d;
 wire [31:0]shamt_d;
 
@@ -69,20 +66,17 @@ assign inst_sllv = op_d[6'b000000] & shamt_d[5'b00000] & funct_d[6'b000100];
 assign inst_srlv = op_d[6'b000000] & shamt_d[5'b00000] & funct_d[6'b000110];
 assign inst_srav = op_d[6'b000000] & shamt_d[5'b00000] & funct_d[6'b000111];
 assign inst_bgtz = op_d[6'b000111];
-assign inst_lb = op_d[6'b100000];
-assign inst_sb = op_d[6'b101000];
-assign inst_sh = op_d[6'b101001];
 
 
 
-assign RegWrite=inst_addu|inst_addiu|inst_subu|inst_lw|inst_jal|inst_sltu|inst_slt|inst_sll|inst_srl|inst_sra|inst_lui|inst_and|inst_or|inst_xor|inst_nor|inst_add|inst_addi|inst_sub|inst_slti|inst_sltiu|inst_andi|inst_ori|inst_xori|inst_sllv|inst_srlv|inst_srav|inst_lb;
+assign RegWrite=inst_addu|inst_addiu|inst_subu|inst_lw|inst_jal|inst_sltu|inst_slt|inst_sll|inst_srl|inst_sra|inst_lui|inst_and|inst_or|inst_xor|inst_nor|inst_add|inst_addi|inst_sub|inst_slti|inst_sltiu|inst_andi|inst_ori|inst_xori|inst_sllv|inst_srlv|inst_srav;
 assign RegDst[0]=inst_addu|inst_subu|inst_sltu|inst_slt|inst_sll|inst_srl|inst_sra|inst_and|inst_or|inst_xor|inst_nor|inst_add|inst_sub|inst_sllv|inst_srlv|inst_srav;             //0:rt,1:rd
 assign RegDst[1]=inst_jal;
-assign ALUSrc[1]=inst_addiu|inst_lw|inst_sw|inst_addi|inst_slti|inst_sltiu|inst_andi|inst_ori|inst_xori|inst_lb|inst_sb|inst_sh;
+assign ALUSrc[1]=inst_addiu|inst_lw|inst_sw|inst_addi|inst_slti|inst_sltiu|inst_andi|inst_ori|inst_xori;
 assign ALUSrc[0]=inst_sll|inst_srl|inst_sra;
-assign MemWrite=inst_sw|inst_sb|inst_sh;
-assign MemRead=inst_lw|inst_lb;
-assign MemtoReg[0]=inst_lw|inst_lui|inst_lb;
+assign MemWrite=inst_sw;
+assign MemRead=inst_lw;
+assign MemtoReg[0]=inst_lw|inst_lui;
 assign MemtoReg[1]=inst_jal|inst_lui;
 assign sel_next_pc[0]=((Zero & inst_beq)|(~Zero & inst_bne))|inst_jr|(branch_taken & inst_bgtz);
 assign sel_next_pc[1]=inst_jal|inst_jr;
@@ -94,12 +88,8 @@ assign alu_control[1]=inst_sltu|inst_slt|inst_sra|inst_and|inst_nor|inst_sltiu|i
 assign alu_control[2]=inst_sll|inst_srl|inst_sra|inst_and|inst_andi|inst_sllv|inst_srlv|inst_srav;
 assign alu_control[3]=inst_or|inst_xor|inst_nor|inst_ori|inst_xori;
 
-assign rsUsed = inst_addu|inst_addiu|inst_subu|inst_lw|inst_sw|inst_beq|inst_bne|inst_jr|inst_slt|inst_sltu|inst_and|inst_or|inst_xor|inst_nor|inst_add|inst_addi|inst_sub|inst_slti|inst_sltiu|inst_andi|inst_ori|inst_xori|inst_bgtz|inst_lb|inst_sb|inst_sh;
-assign rtUsed = inst_addu|inst_subu|inst_sw|inst_beq|inst_bne|inst_slt|inst_sltu|inst_sll|inst_srl|inst_sra|inst_and|inst_or|inst_xor|inst_nor|inst_add|inst_sub|inst_sllv|inst_srlv|inst_srav|inst_sb|inst_sh;
-
-assign mem_load_type = inst_lb;
-assign op_sb=inst_sb;
-assign op_sh=inst_sh;
+assign rsUsed = inst_addu|inst_addiu|inst_subu|inst_lw|inst_sw|inst_beq|inst_bne|inst_jr|inst_slt|inst_sltu|inst_and|inst_or|inst_xor|inst_nor|inst_add|inst_addi|inst_sub|inst_slti|inst_sltiu|inst_andi|inst_ori|inst_xori|inst_bgtz;
+assign rtUsed = inst_addu|inst_subu|inst_sw|inst_beq|inst_bne|inst_slt|inst_sltu|inst_sll|inst_srl|inst_sra|inst_and|inst_or|inst_xor|inst_nor|inst_add|inst_sub|inst_sllv|inst_srlv|inst_srav;
 
 endmodule
 

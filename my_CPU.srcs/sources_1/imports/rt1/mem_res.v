@@ -14,9 +14,6 @@ module MEM_res(
     input wire [31:0]EX_mem_addr_i,
     input wire [31:0]EX_reg_read_data2_i,
     input wire EX_ready_go,
-    input wire EX_mem_load_type_i,
-    input wire EX_op_sb_i,
-    input wire EX_op_sh_i,
     
     output wire [31:0]EX_instr_o,
     output wire [4:0]EX_reg_write_addr_o,
@@ -27,11 +24,7 @@ module MEM_res(
     output wire [31:0]EX_pc_plus_8_o,
     output wire [31:0]EX_alu_result_o,
     output wire [31:0]EX_mem_addr_o,
-    output wire [31:0]EX_reg_read_data2_o,
-    output wire EX_mem_load_type_o,
-    output wire EX_op_sb_o,
-    output wire EX_op_sh_o
-
+    output wire [31:0]EX_reg_read_data2_o
 );
 
 wire MEM_res_en;
@@ -118,28 +111,5 @@ pipeline_reg MEM_EX_reg_read_data(
     .q_o(EX_reg_read_data2_o)
 );
 
-pipeline_reg #(.Width(1))MEM_ff_EX_mem_load_type(
-    .clk(clk),
-    .rst(rst),
-    .en(MEM_res_en),
-    .d_i(EX_mem_load_type_i),
-    .q_o(EX_mem_load_type_o)
-);
-
-pipeline_reg #(.Width(1))MEM_ff_EX_op_sb(
-    .clk(clk),
-    .rst(rst),
-    .en(MEM_res_en),
-    .d_i(EX_op_sb_i),
-    .q_o(EX_op_sb_o)
-);
-
-pipeline_reg #(.Width(1))MEM_ff_EX_op_sh(
-    .clk(clk),
-    .rst(rst),
-    .en(MEM_res_en),
-    .d_i(EX_op_sh_i),
-    .q_o(EX_op_sh_o)
-);
 
 endmodule

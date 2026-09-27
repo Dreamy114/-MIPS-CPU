@@ -10,7 +10,7 @@ module cpu(
     output wire [31:0]data_addr,
     output wire [31:0]data_wdata,
     output wire data_en,
-    output wire [3:0]data_we,
+    output wire data_we,
     input wire [31:0]data_rdata 
 );
 
@@ -48,10 +48,6 @@ wire [4:0]  ID_rt;
 wire        ID_ready_go;
 wire        ID_rsUsed;
 wire        ID_rtUsed;
-wire        ID_mem_load_type;
-wire        ID_op_sb;
-wire        ID_op_sh;
-
 
 wire [1:0]  ForwardA;
 wire [1:0]  ForwardB;
@@ -75,13 +71,11 @@ wire [31:0] EX_pc_plus_8;
 wire [4:0]  EX_rs;
 wire [4:0]  EX_rt;
 
+wire        EX_Zero;
 wire [31:0] EX_alu_result;
 wire [31:0] EX_mem_addr;
 wire        EX_ready_go;
 wire        EX_MemRead;
-wire        EX_mem_load_type;
-wire        EX_op_sb;
-wire        EX_op_sh;
 
 
 wire [31:0] MEM_instr;
@@ -95,11 +89,6 @@ wire [31:0] MEM_mem_addr;
 wire [31:0] MEM_reg_read_data2;
 wire [31:0] MEM_mem_read_data;
 wire        MEM_ready_go;
-wire        MEM_mem_load_type;
-wire [31:0] mem_forward_data;
-wire        MEM_op_sb;
-wire        MEM_op_sh;
-
 
 wire [31:0] WB_instr;
 wire [4:0]  WB_reg_write_addr;
@@ -194,10 +183,7 @@ ID_stage ID(
     .ID_rt(ID_rt),
     .ID_ready_go(ID_ready_go),
     .ID_rsUsed(ID_rsUsed),
-    .ID_rtUsed(ID_rtUsed),
-    .ID_mem_load_type(ID_mem_load_type),
-    .ID_op_sb(ID_op_sb),
-    .ID_op_sh(ID_op_sh)
+    .ID_rtUsed(ID_rtUsed)
 );
 
 branch_forwarding_unit BranchForwarding_unit(
@@ -249,9 +235,6 @@ EX_res ex_res(
     .ID_rt_i(ID_rt),
     .ID_ready_go(ID_ready_go),
     .Stall(Stall),
-    .ID_mem_load_type_i(ID_mem_load_type),
-    .ID_op_sb_i(ID_op_sb),
-    .ID_op_sh_i(ID_op_sh),
 
     .ID_instr_o(EX_instr),
     .ID_imm_o(EX_imm),
@@ -267,10 +250,7 @@ EX_res ex_res(
     .ID_reg_read_data2_o(EX_reg_read_data2),
     .ID_pc_plus_8_o(EX_pc_plus_8),
     .ID_rs_o(EX_rs),
-    .ID_rt_o(EX_rt),
-    .ID_mem_load_type_o(EX_mem_load_type),
-    .ID_op_sb_o(EX_op_sb),
-    .ID_op_sh_o(EX_op_sh)
+    .ID_rt_o(EX_rt)
 );
 
 forwarding_unit Forwarding_unit(
@@ -293,7 +273,7 @@ EX_stage EX(
     .ID_shamt(EX_shamt),
     .ID_imm(EX_imm),
 
-    .mem_forward_data(mem_forward_data),
+    .MEM_alu_result(MEM_alu_result),
     .WB_reg_write_data(WB_reg_write_data),
     .ForwardA(ForwardA),
     .ForwardB(ForwardB),
@@ -301,7 +281,6 @@ EX_stage EX(
     .EX_alu_result(EX_alu_result),
     .EX_mem_addr(EX_mem_addr),
     .EX_ready_go(EX_ready_go)
-    
 );
 
 MEM_res mem_res(
@@ -318,9 +297,6 @@ MEM_res mem_res(
     .EX_mem_addr_i(EX_mem_addr),
     .EX_reg_read_data2_i(EX_reg_read_data2),
     .EX_ready_go(EX_ready_go),
-    .EX_mem_load_type_i(EX_mem_load_type),
-    .EX_op_sb_i(EX_op_sb),
-    .EX_op_sh_i(EX_op_sh),
 
     .EX_instr_o(MEM_instr),
     .EX_reg_write_addr_o(MEM_reg_write_addr),
@@ -331,10 +307,7 @@ MEM_res mem_res(
     .EX_pc_plus_8_o(MEM_pc_plus_8),
     .EX_alu_result_o(MEM_alu_result),
     .EX_mem_addr_o(MEM_mem_addr),
-    .EX_reg_read_data2_o(MEM_reg_read_data2),
-    .EX_mem_load_type_o(MEM_mem_load_type),
-    .EX_op_sb_o(MEM_op_sb),
-    .EX_op_sh_o(MEM_op_sh)
+    .EX_reg_read_data2_o(MEM_reg_read_data2)
 
 );
 
@@ -345,28 +318,15 @@ MEM_stage MEM(
     .EX_reg_read_data2(MEM_reg_read_data2),
     .EX_mem_addr(MEM_mem_addr),
 
-    .EX_alu_result(MEM_alu_result),
-    .EX_MemtoReg(MEM_MemtoReg),
-    .EX_pc_plus_8(MEM_pc_plus_8),
-    .EX_instr(MEM_instr),
-
     .data_rdata(data_rdata),
     
-    .EX_mem_load_type(MEM_mem_load_type),
-
-    .EX_op_sb(MEM_op_sb),
-    .EX_op_sh(MEM_op_sh),
-
-
     .MEM_mem_read_data(MEM_mem_read_data),
     .MEM_ready_go(MEM_ready_go),
 
     .data_addr(data_addr),
     .data_wdata(data_wdata),
     .data_we(data_we),
-    .data_en(data_en),
-
-    .mem_forward_data(mem_forward_data)
+    .data_en(data_en)
 
 );
 

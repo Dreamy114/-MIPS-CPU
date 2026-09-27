@@ -9,7 +9,7 @@ wire [31:0] inst_rdata;
 wire [31:0] data_addr;
 wire [31:0] data_wdata;
 wire [31:0] data_rdata;
-wire [3:0]data_we;
+wire data_we;
 wire data_en;
 
 cpu cpu_u(
